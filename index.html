@@ -76,34 +76,43 @@
                     let timerInterval;
                   axios
                     .get("http://192.168.1.3:8080/make?drink=" + drink + "&strength=" + strength)
-                    .then(response => (
-                        Swal.fire({
-                          allowOutsideClick: false,
-                          showConfirmButton: false,
-                          title: 'Mixer...',
-                          html:
-                            'Din ' + response.data['drink'] + ' er klar om <strong></strong> sekunder!<br/><br/>',
-                          timer: response.data['time'] * 1000,
-                          willOpen: () => {
-                            const content = Swal.getContent()
-                            const $ = content.querySelector.bind(content)
+                    .then(function (response) {
 
-                            const stop = $('#stop')
-                            const resume = $('#resume')
-                            const toggle = $('#toggle')
-                            const increase = $('#increase')
+                        if ("error" in response.data)  {
+                          Swal.fire(
+                            'Rooolig!',
+                            'Jeg er i fuld gang med at lave en drink... Vent venligst',
+                            'warning'
+                          )
+                        } else {
+                          Swal.fire({
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            title: 'Mixer...',
+                            html:
+                              'Din ' + response.data['drink'] + ' er klar om <strong></strong> sekunder!<br/><br/>',
+                            timer: response.data['time'] * 1000,
+                            willOpen: () => {
+                              const content = Swal.getContent()
+                              const $ = content.querySelector.bind(content)
 
-                            timerInterval = setInterval(() => {
-                              Swal.getContent().querySelector('strong')
-                                .textContent = (Swal.getTimerLeft() / 1000)
-                                  .toFixed(0)
-                            }, 100)
-                          },
-                          willClose: () => {
-                            clearInterval(timerInterval)
-                          }
-                        })
-                    ));
+                              const stop = $('#stop')
+                              const resume = $('#resume')
+                              const toggle = $('#toggle')
+                              const increase = $('#increase')
+
+                              timerInterval = setInterval(() => {
+                                Swal.getContent().querySelector('strong')
+                                  .textContent = (Swal.getTimerLeft() / 1000)
+                                    .toFixed(0)
+                              }, 100)
+                            },
+                            willClose: () => {
+                              clearInterval(timerInterval)
+                            }
+                          })
+                        }
+                    });
                 }
               }
             });
