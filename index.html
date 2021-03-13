@@ -90,7 +90,7 @@
                             showConfirmButton: false,
                             title: 'Mixer...',
                             html:
-                              'Din ' + response.data['drink'] + ' er klar om <strong></strong> sekunder!<br/><br/>' + (response['add'] != null) ? response['add'] : '',
+                              'Din ' + response.data['drink'] + ' er klar om <strong></strong> sekunder!<br/><br/>' + response.data['add'],
                             timer: response.data['time'] * 1000,
                             willOpen: () => {
                               const content = Swal.getContent()
